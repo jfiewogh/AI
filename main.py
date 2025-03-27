@@ -1,6 +1,5 @@
 import gzip
 import numpy
-from matplotlib import pyplot
 import random
 import time
 
@@ -19,17 +18,25 @@ with gzip.open("samples/train-labels-idx1-ubyte.gz", "r") as f:
     labels_data = f.read(image_size * image_size * image_count)
     labels = numpy.frombuffer(labels_data, dtype=numpy.uint8)
 
-print(labels)
+a = 10
+b = 2
 
-def show_image(index):
-    image = numpy.asarray(images[index]).squeeze() # 2D array of size 28
-    # range from 0 (empty) to 255 (filled)
+matrix = [[0] * 28 * 28] +  [[0] * a for _ in range(b)][0] + [[0] * 10]
 
-    print(labels[index])
+print(len(matrix))
 
-    pyplot.imshow(image)
-    pyplot.show()
+def get_image_and_label(index):
+    image = numpy.asarray(images[index]).squeeze() # 2D array of size 28 # 0 - 255
+    label = labels[index]
+    return image, label
 
-a = random.randint(0, image_count - 1)
-print(a)
-show_image(a)
+image, label = get_image_and_label(0)
+
+def add_image_to_matrix(image):
+    for x in range(image_size):
+        for y in range(image_size):
+            matrix[x * image_size + y] = float(image[x][y]) / 255
+
+add_image_to_matrix(image)
+
+print(matrix[0])
